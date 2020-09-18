@@ -1,0 +1,23 @@
+name: Update Link Automatically
+on: [push]
+  #schedule:
+  #- cron: "0 */6 * * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: run update link script
+      run: |
+        date > ./.timestamp
+        chmod +x ./update-links.sh
+        ./update-links.sh
+    - name: commit and push
+      run: |
+        git config --global user.name 'github action'
+        git config --global user.email 'flaskist@users.noreply.github.com'
+        git add .
+        git commit -m "update links"
+        git push origin master
